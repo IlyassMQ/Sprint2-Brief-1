@@ -543,6 +543,20 @@ document.addEventListener('DOMContentLoaded', () => {
      * @function applyAllFilters
      */
     const applyAllFilters = () => {
+        loadAllJobs();
+        searchInput.addEventListener('input',(e)=>{
+            const input =e.target.value;
+            
+            const filtred = allJobs.filter((tmp)=>
+            tmp.company.toUpperCase().includes(input.toUpperCase()) ||
+            tmp.position.toUpperCase().includes(input.toUpperCase()) ||
+            tmp.skills.find(skill =>
+                skill.toUpperCase().includes(input.toUpperCase())
+            )
+        )
+            renderJobs(filtred);
+        })
+
         // TODO: Implement comprehensive filtering
         // 1. Get search term
         // 2. Combine profile skills and manual filters
