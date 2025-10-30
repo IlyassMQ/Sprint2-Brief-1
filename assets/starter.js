@@ -599,7 +599,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Clear manual filters array
         // 2. Clear search input
         // 3. Apply filters
+        clearFiltersBtn.addEventListener("click" , () => {
+            searchInput.value = '';
+            renderJobs(allJobs);
+
+        })
     };
+    handleClearFilters();
 
     // ------------------------------------
     // --- INITIALIZATION ---
