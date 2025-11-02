@@ -139,6 +139,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Add error class to input
         // 2. Find error span element
         // 3. Display error message
+        input.classList.add('has-error');
+    let errorSpan = input.nextElementSibling;
+    if (!errorSpan || !errorSpan.classList.contains('form-error')) {
+        errorSpan = document.createElement('span');
+        errorSpan.className = 'form-error';
+        input.parentNode.appendChild(errorSpan);
+    }
+    errorSpan.textContent = message;
+    errorSpan.style.display = 'block';
     };
 
     /**
@@ -150,6 +159,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // TODO: Implement error clearing logic
         // 1. Remove error classes from inputs
         // 2. Clear error messages
+        const errorInput = form.querySelectorAll('.has-error');
+    errorInput.forEach(input => input.classList.remove('has-error'));
+    const errorSpan = form.querySelectorAll('.form-error');
+    errorSpan.forEach(span => span.style.display = 'none');
     };
 
     /**
@@ -175,8 +188,38 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Validate all required fields
         // 2. Validate URL format for logo
         // 3. Show appropriate error messages
-        return true;
+        clearErrors(manageJobForm);
+        let isValid = true;
+
+    // Required fields
+    const requiredFields = [
+        { input: jobCompanyInput, name: "Company" },
+        { input: jobPositionInput, name: "Position" },
+        { input: jobContractInput, name: "Contract" },
+        { input: jobLocationInput, name: "Location" },
+        { input: jobRoleInput, name: "Role" },
+        { input: jobLevelInput, name: "Level" },
+        { input: jobSkillsInput, name: "Skills" },
+        { input: jobDescriptionInput, name: "Description" }
+    ];
+
+    requiredFields.forEach(field => {
+        if (!field.input.value.trim()) {
+            showError(field.input, `${field.name} is required`);
+            isValid = false;
+        }
+    });
+
+   
     };
+
+    // for submit donT load
+    manageJobForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+        if (validateJobForm() === true) {
+        closeManageModal();
+        }
+    });
 
     // ------------------------------------
     // --- PROFILE MANAGEMENT ---
