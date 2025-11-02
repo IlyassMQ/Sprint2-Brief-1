@@ -209,6 +209,20 @@ document.addEventListener('DOMContentLoaded', () => {
         //     <span>${skill}</span>
         //     <button class="profile-skill-remove" aria-label="Remove skill ${skill}">✕</button>
         //  </li>`
+        const skill = skillInput.value.trim();
+
+        if (skill !=="") {
+        userProfile.skills.push(skill);
+
+        profileSkillsList.innerHTML += `
+            <li class="profile-skill-tag" data-skill="${skill}">
+                <span>${skill}</span>
+                <button class="profile-skill-remove" aria-label="Remove skill ${skill}">✕</button>
+            </li>
+        `;
+
+        skillInput.value = "";
+    }
     };
 
     /**
@@ -242,7 +256,19 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Check if Enter key was pressed
         // 2. Get skill value
         // 3. Add to profile if not duplicate
-        // 4. Re-render skills and apply filters
+        // 4. Re-render skills and apply filters    
+        let pKey = e.key;
+        let skill = e.target.value.trim().toLowerCase();
+        if (pKey==="Enter"){
+            e.preventDefault();
+            if(skill!=="" && !userProfile.skills.some(elem => elem.trim().toLowerCase()===skill)) {
+                // console.log(userProfile.skills.some(elem => elem.trim().toLowerCase()===skill));
+                renderProfileSkills();
+                e.target.value="";
+            }
+        }
+        console.log(skill);
+
     };
 
     /**
@@ -250,12 +276,18 @@ document.addEventListener('DOMContentLoaded', () => {
      * @function handleSkillRemove
      * @param {Event} e - Click event
      */
-    const handleSkillRemove = (e) => {
+   const handleSkillRemove = (e) => {
         // TODO: Implement skill removal
         // 1. Find clicked remove button
         // 2. Get skill name
         // 3. Remove from profile
         // 4. Re-render and apply filters
+        if (e.target.classList.contains('profile-skill-remove')) {
+        e.preventDefault();
+        const skillItem = e.target.closest('.profile-skill-tag');
+        skillItem.remove();
+
+    }
     };
 
     // ------------------------------------
@@ -649,6 +681,8 @@ document.addEventListener('DOMContentLoaded', () => {
         renderJobs(allJobs);
         
         // TODO: Add remaining event listeners
+            skillInput.addEventListener('keydown', handleSkillAdd)
+            profileSkillsList.addEventListener('click', handleSkillRemove);
         // Profile events
         // Filter events  
         // Job list events
